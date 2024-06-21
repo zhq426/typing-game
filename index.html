@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn to Type | Type Better | Type Faster - Typing.aitool.icu - Typing.aitool.icu</title>
+    <meta name="description" content="World's most popular free typing program! Typing.com’s K–12 typing curriculum features touch typing, digital citizenship, coding lessons, and games.">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f4f8;
+        }
+        #game-container {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 90%;
+        }
+        #header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        #current-group {
+            font-size: 18px;
+            color: #34495e;
+        }
+        #target-text {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .letter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            border: 2px solid #bdc3c7;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .letter.current {
+            border-color: #f39c12;
+            box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+        }
+        .letter.correct {
+            border-color: #2ecc71;
+            color: #2ecc71;
+        }
+        .letter.incorrect {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+        #info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        #score, #time {
+            font-size: 18px;
+            color: #34495e;
+        }
+        #next-group {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #3498db;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #next-group:hover {
+            background-color: #2980b9;
+        }
+        #keyboard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+        .key {
+            width: 40px;
+            height: 40px;
+            margin: 0 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ecf0f1;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: default;
+            transition: all 0.3s ease;
+        }
+        .key.highlight {
+            background-color: #f39c12;
+            color: white;
+            box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="header">
+            <h1>Keyboard Typing Practice</h1>
+            <div id="current-group">Current Alphabet Group：</div>
+        </div>
+        <div id="target-text"></div>
+        <div id="info">
+            <div id="score">Score: 0</div>
+            <div id="time">Time: 60s</div>
+        </div>
+        <button id="next-group">Next Group</button>
+        <div id="keyboard">
+            <div class="keyboard-row">
+                <div class="key" data-key="Q">Q</div>
+                <div class="key" data-key="W">W</div>
+                <div class="key" data-key="E">E</div>
+                <div class="key" data-key="R">R</div>
+                <div class="key" data-key="T">T</div>
+                <div class="key" data-key="Y">Y</div>
+                <div class="key" data-key="U">U</div>
+                <div class="key" data-key="I">I</div>
+                <div class="key" data-key="O">O</div>
+                <div class="key" data-key="P">P</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="key" data-key="A">A</div>
+                <div class="key" data-key="S">S</div>
+                <div class="key" data-key="D">D</div>
+                <div class="key" data-key="F">F</div>
+                <div class="key" data-key="G">G</div>
+                <div class="key" data-key="H">H</div>
+                <div class="key" data-key="J">J</div>
+                <div class="key" data-key="K">K</div>
+                <div class="key" data-key="L">L</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="key" data-key="Z">Z</div>
+                <div class="key" data-key="X">X</div>
+                <div class="key" data-key="C">C</div>
+                <div class="key" data-key="V">V</div>
+                <div class="key" data-key="B">B</div>
+                <div class="key" data-key="N">N</div>
+                <div class="key" data-key="M">M</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const targetText = document.getElementById('target-text');
+        const scoreDisplay = document.getElementById('score');
+        const timeDisplay = document.getElementById('time');
+        const currentGroupDisplay = document.getElementById('current-group');
+        const nextGroupButton = document.getElementById('next-group');
+        const keyboard = document.getElementById('keyboard');
+
+        const letterGroups = [
+            'ABC', 'DEF', 'GHI', 'JKL', 'MNO',
+            'PQR', 'STU', 'VWX', 'YZ'
+        ];
+
+        let currentGroupIndex = 0;
+        let score = 0;
+        let timeLeft = 60;
+        let timer;
+        let currentTarget = '';
+        let currentIndex = 0;
+
+        function getRandomString() {
+            const currentGroup = letterGroups[currentGroupIndex];
+            let result = '';
+            for (let i = 0; i < 20; i++) {
+                const randomChar = Math.random() < 0.2 ? ' ' : currentGroup[Math.floor(Math.random() * currentGroup.length)];
+                result += randomChar;
+            }
+            return result;
+        }
+
+        function updateTargetText() {
+            currentTarget = getRandomString();
+            targetText.innerHTML = '';
+            for (let i = 0; i < currentTarget.length; i++) {
+                const span = document.createElement('span');
+                span.className = 'letter';
+                span.textContent = currentTarget[i];
+                targetText.appendChild(span);
+            }
+            currentIndex = 0;
+            updateCurrentLetter();
+        }
+
+        function updateCurrentLetter() {
+            const letters = targetText.getElementsByClassName('letter');
+            for (let i = 0; i < letters.length; i++) {
+                letters[i].classList.remove('current');
+            }
+            if (currentIndex < letters.length) {
+                letters[currentIndex].classList.add('current');
+                highlightKey(currentTarget[currentIndex]);
+            }
+        }
+
+        function highlightKey(letter) {
+            const keys = keyboard.getElementsByClassName('key');
+            for (let key of keys) {
+                key.classList.remove('highlight');
+                if (key.dataset.key === letter.toUpperCase()) {
+                    key.classList.add('highlight');
+                }
+            }
+        }
+
+        function startGame() {
+            updateTargetText();
+            currentGroupDisplay.textContent = `Current Alphabet Group：${letterGroups[currentGroupIndex]}`;
+            timer = setInterval(() => {
+                timeLeft--;
+                timeDisplay.textContent = `Time: ${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            clearInterval(timer);
+            nextGroupButton.disabled = true;
+            alert(`Game Over! Your score is: ${score}`);
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (currentIndex >= currentTarget.length) return;
+
+            const expectedChar = currentTarget[currentIndex];
+            const typedChar = event.key.toUpperCase();
+            const letters = targetText.getElementsByClassName('letter');
+
+            if (typedChar === expectedChar) {
+                letters[currentIndex].classList.add('correct');
+                score++;
+                scoreDisplay.textContent = `Score: ${score}`;
+            } else {
+                letters[currentIndex].classList.add('incorrect');
+            }
+
+            currentIndex++;
+            updateCurrentLetter();
+
+            if (currentIndex >= currentTarget.length) {
+                setTimeout(updateTargetText, 500);
+            }
+        });
+
+        nextGroupButton.addEventListener('click', () => {
+            currentGroupIndex = (currentGroupIndex + 1) % letterGroups.length;
+            timeLeft = 60;
+            score = 0;
+            scoreDisplay.textContent = `Score: ${score}`;
+            startGame();
+        });
+
+        startGame();
+    </script>
+</body>
+</html>
